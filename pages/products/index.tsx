@@ -1,10 +1,23 @@
+import { PRODUCTS_URL } from "@/endpoints";
+import useDebounce from "@/hooks/useDebounce";
 import { ProductRecord, ResponsePagination } from "@/types";
-import { Table } from "@geist-ui/core";
-import { useState } from "react";
+import styled from "@emotion/styled";
+import { Button, Input, Table } from "@geist-ui/core";
+import { Filter } from "@geist-ui/icons";
+import { FormEvent, useRef, useState } from "react";
 import useSWR from "swr";
 import CustomPagination from "../components/customPagination";
 
+const ActionContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+`;
+
 export default function ProductsPage() {
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query);
   const [pagination, setPagination] = useState({
     total: 0,
     skip: 0,
@@ -16,7 +29,7 @@ export default function ProductsPage() {
       products: ProductRecord[];
     }>
   >(
-    `https://dummyjson.com/products?skip=${pagination.skip}&limit=${pagination.limit}`,
+    `${PRODUCTS_URL}/search?q=${debouncedQuery}&skip=${pagination.skip}&limit=${pagination.limit}`,
     {
       onSuccess(data) {
         const { total, skip } = data;
@@ -25,8 +38,26 @@ export default function ProductsPage() {
     }
   );
 
+  const onSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
+      <ActionContainer>
+        <Button iconRight={<Filter />} h={0.9} ghost auto>
+          Filter
+        </Button>
+        <form onSubmit={onSearch}>
+          <Input
+            value={query}
+            placeholder="Search Product"
+            clearable
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </form>
+      </ActionContainer>
+
       <Table data={data?.products} emptyText="No data">
         <Table.Column prop="title" label="Product Name" />
         <Table.Column prop="brand" label="Brand" />
