@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useWindow } from "@/contexts/WindowProvider";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Navigation } from "@geist-ui/icons";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Navigation,
+  Package,
+  ShoppingCart,
+} from "@geist-ui/icons";
 import { Button, Text } from "@geist-ui/core";
 import { useRouter } from "next/router";
 
@@ -39,10 +45,12 @@ const links = [
   {
     title: "Products",
     href: "/products",
+    icon: <Package />,
   },
   {
     title: "Carts",
     href: "/carts",
+    icon: <ShoppingCart />,
   },
 ];
 
@@ -71,7 +79,7 @@ const Sidebar = () => {
           {links.map((link) => (
             <Link href={link.href} key={link.title}>
               <NavLink
-                icon={<Navigation />}
+                icon={link.icon}
                 type={pathname === link.href ? "success" : "default"}
               >
                 {!hide && (

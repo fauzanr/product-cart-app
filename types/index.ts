@@ -18,4 +18,22 @@ export interface ProductRecord {
   images: string[];
 }
 
+export interface CartRecord {
+  id: number;
+  products: Array<{
+    id: number;
+    title: string;
+    price: number;
+    quantity: number;
+    total: number;
+    discountPercentage: number;
+    discountedPrice: number;
+  }>;
+  total: number;
+  discountedTotal: number;
+  userId: number;
+  totalProducts: number;
+  totalQuantity: number;
+}
+
 export type ResponsePagination<T> = Pagination & T;
