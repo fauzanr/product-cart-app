@@ -1,12 +1,12 @@
+import CustomPagination from "@/components/customPagination";
 import { PRODUCTS_URL } from "@/endpoints";
 import useDebounce from "@/hooks/useDebounce";
 import { ProductRecord, ResponsePagination } from "@/types";
 import styled from "@emotion/styled";
 import { Button, Input, Table } from "@geist-ui/core";
 import { Filter } from "@geist-ui/icons";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import useSWR from "swr";
-import CustomPagination from "../components/customPagination";
 
 const ActionContainer = styled.div`
   display: flex;
