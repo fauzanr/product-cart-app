@@ -4,6 +4,7 @@ import { useWindow } from "@/contexts/WindowProvider";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Navigation } from "@geist-ui/icons";
 import { Button, Text } from "@geist-ui/core";
+import { useRouter } from "next/router";
 
 const Relative = styled.div<{ extend: boolean; hide: boolean }>`
   position: relative;
@@ -46,6 +47,7 @@ const links = [
 ];
 
 const Sidebar = () => {
+  const { pathname } = useRouter();
   const { isMobile } = useWindow();
   const [hide, setHide] = useState(isMobile);
 
@@ -68,7 +70,10 @@ const Sidebar = () => {
         <Nav>
           {links.map((link) => (
             <Link href={link.href} key={link.title}>
-              <NavLink icon={<Navigation />}>
+              <NavLink
+                icon={<Navigation />}
+                type={pathname === link.href ? "success" : "default"}
+              >
                 {!hide && (
                   <Text span pl="20px">
                     {link.title}
