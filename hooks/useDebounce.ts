@@ -15,3 +15,12 @@ const useDebounce = (query: string, delay: number = 400) => {
 };
 
 export default useDebounce;
+
+let timeout: NodeJS.Timeout;
+
+export const debounce = (callback: () => void, delay: number = 400) => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    callback();
+  }, delay);
+};

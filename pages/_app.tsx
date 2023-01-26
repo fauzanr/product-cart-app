@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import Layout from "@/components/layout";
 import WindowProvider from "@/contexts/WindowProvider";
 import { SWRConfig } from "swr";
+import { GeistProvider } from "@geist-ui/core";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -12,11 +13,13 @@ export default function App({ Component, pageProps }: AppProps) {
           fetch(resource, init).then((res) => res.json()),
       }}
     >
-      <WindowProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </WindowProvider>
+      <GeistProvider>
+        <WindowProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </WindowProvider>
+      </GeistProvider>
     </SWRConfig>
   );
 }
