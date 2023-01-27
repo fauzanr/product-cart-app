@@ -69,15 +69,17 @@ export default function ProductsPage() {
         />
       </ActionContainer>
 
-      <Spin loading={isLoading}>
-        <Table data={data?.products} emptyText="No data">
-          <Table.Column prop="title" label="Product Name" />
-          <Table.Column prop="brand" label="Brand" />
-          <Table.Column prop="price" label="Price" />
-          <Table.Column prop="stock" label="Stock" />
-          <Table.Column prop="category" label="Category" />
-        </Table>
-      </Spin>
+      <div style={{ overflowX: "auto" }}>
+        <Spin loading={isLoading}>
+          <Table data={data?.products} emptyText="No data">
+            <Table.Column prop="title" label="Product Name" />
+            <Table.Column prop="brand" label="Brand" />
+            <Table.Column prop="price" label="Price" />
+            <Table.Column prop="stock" label="Stock" />
+            <Table.Column prop="category" label="Category" />
+          </Table>
+        </Spin>
+      </div>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />
     </div>

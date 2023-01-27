@@ -5,25 +5,27 @@ import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
-  Navigation,
   Package,
   ShoppingCart,
 } from "@geist-ui/icons";
 import { Button, Text } from "@geist-ui/core";
 import { useRouter } from "next/router";
 
+const SIDEBAR_WIDTH = "250px";
+
 const Relative = styled.div<{ extend: boolean; hide: boolean }>`
+  flex: none;
   position: relative;
-  width: ${({ hide, extend }) => (hide || !extend ? "62px" : "250px")};
+  width: ${({ hide, extend }) => (hide || !extend ? "62px" : SIDEBAR_WIDTH)};
 `;
 
-const Wrapper = styled.div<{ extend: boolean; hide: boolean }>`
+const Wrapper = styled.div<{ hide: boolean }>`
   box-shadow: 0px 2px 8px 0px #00000040;
   height: 100%;
-  width: ${({ hide }) => (hide ? "62px" : "250px")};
-  position: ${({ extend }) => (extend ? "absolute" : "static")};
+  width: ${({ hide }) => (hide ? "inherit" : SIDEBAR_WIDTH)};
 
-  z-index: 1;
+  position: absolute;
+  z-index: 2;
   background: white;
 `;
 
@@ -66,7 +68,7 @@ const Sidebar = () => {
 
   return (
     <Relative extend={!isMobile} hide={hide}>
-      <Wrapper extend={!isMobile} hide={hide}>
+      <Wrapper hide={hide}>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             iconRight={hide ? <ChevronRight /> : <ChevronLeft />}

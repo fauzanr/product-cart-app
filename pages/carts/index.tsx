@@ -60,13 +60,15 @@ export default function CartsPage() {
       </ActionContainer>
 
       <Spin loading={isLoading}>
-        <Table data={data?.carts} emptyText="No data">
-          <Table.Column prop="userId" label="User ID" />
-          <Table.Column prop="totalProducts" label="Total Products" />
-          <Table.Column prop="totalQuantity" label="Total Quantity" />
-          <Table.Column prop="total" label="Total Price" />
-          <Table.Column prop="id" width={50} render={renderAction} />
-        </Table>
+        <div style={{ overflowX: "auto" }}>
+          <Table data={data?.carts} emptyText="No data">
+            <Table.Column prop="userId" label="User ID" />
+            <Table.Column prop="totalProducts" label="Total Products" />
+            <Table.Column prop="totalQuantity" label="Total Quantity" />
+            <Table.Column prop="total" label="Total Price" />
+            <Table.Column prop="id" width={50} render={renderAction} />
+          </Table>
+        </div>
       </Spin>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />

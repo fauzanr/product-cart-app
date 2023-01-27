@@ -61,18 +61,20 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
           <Text h3 mb={1} mt={3}>
             Products
           </Text>
-          <Table data={cart.products} emptyText="No data">
-            <Table.Column prop="title" label="Product Name" />
-            <Table.Column prop="price" label="Price" />
-            <Table.Column prop="quantity" label="Qty" />
-            <Table.Column
-              prop="id"
-              label="Amount"
-              render={renderProductAmount}
-            />
-            <Table.Column prop="discountPercentage" label="Discount %" />
-            <Table.Column prop="discountedPrice" label="Discounted Amount" />
-          </Table>
+          <div style={{ overflowX: "auto" }}>
+            <Table data={cart.products} emptyText="No data">
+              <Table.Column prop="title" label="Product Name" />
+              <Table.Column prop="price" label="Price" />
+              <Table.Column prop="quantity" label="Qty" />
+              <Table.Column
+                prop="id"
+                label="Amount"
+                render={renderProductAmount}
+              />
+              <Table.Column prop="discountPercentage" label="Discount %" />
+              <Table.Column prop="discountedPrice" label="Discounted Amount" />
+            </Table>
+          </div>
         </>
       )}
     </div>

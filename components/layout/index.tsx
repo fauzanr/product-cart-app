@@ -8,11 +8,16 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
+const Main = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;
+
 const Layout = ({ children }: { children: JSX.Element }) => {
   return (
     <Wrapper>
       <Sidebar />
-      <div style={{ flex: 1 }}>{children}</div>
+      <Main>{children}</Main>
     </Wrapper>
   );
 };
