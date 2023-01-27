@@ -80,7 +80,7 @@ const Sidebar = () => {
             <Link href={link.href} key={link.title}>
               <NavLink
                 icon={link.icon}
-                type={pathname === link.href ? "success" : "default"}
+                type={pathname.startsWith(link.href) ? "success" : "default"}
               >
                 {!hide && (
                   <Text span pl="20px">

@@ -3,8 +3,10 @@ import Spin from "@/components/spin";
 import { CARTS_URL } from "@/endpoints";
 import { CartRecord, ResponsePagination } from "@/types";
 import styled from "@emotion/styled";
-import { Button, Table, useToasts } from "@geist-ui/core";
-import { Filter } from "@geist-ui/icons";
+import { Button, Table, Text, useToasts } from "@geist-ui/core";
+import { TableColumnRender } from "@geist-ui/core/esm/table";
+import { Eye, Filter } from "@geist-ui/icons";
+import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -37,8 +39,20 @@ export default function CartsPage() {
     },
   });
 
+  const renderAction: TableColumnRender<CartRecord> = (id) => {
+    return (
+      <Link href={`/carts/${id}`}>
+        <Button auto scale={0.5} iconRight={<Eye />}></Button>
+      </Link>
+    );
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
+      <Text h1 py={1}>
+        Carts
+      </Text>
+
       <ActionContainer>
         <Button iconRight={<Filter />} h={0.9} ghost auto>
           Filter
@@ -50,7 +64,8 @@ export default function CartsPage() {
           <Table.Column prop="userId" label="User ID" />
           <Table.Column prop="totalProducts" label="Total Products" />
           <Table.Column prop="totalQuantity" label="Total Quantity" />
-          <Table.Column prop="total" label="Stock" />
+          <Table.Column prop="total" label="Total Price" />
+          <Table.Column prop="id" width={50} render={renderAction} />
         </Table>
       </Spin>
 

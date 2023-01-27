@@ -4,7 +4,7 @@ import { PRODUCTS_URL } from "@/endpoints";
 import { debounce } from "@/hooks/useDebounce";
 import { ProductRecord, ResponsePagination } from "@/types";
 import styled from "@emotion/styled";
-import { Button, Input, Table, useToasts } from "@geist-ui/core";
+import { Button, Input, Table, Text, useToasts } from "@geist-ui/core";
 import { Filter } from "@geist-ui/icons";
 import { ChangeEvent, useState } from "react";
 import useSWR from "swr";
@@ -53,6 +53,10 @@ export default function ProductsPage() {
 
   return (
     <div style={{ padding: "1rem" }}>
+      <Text h1 py={1}>
+        Products
+      </Text>
+
       <ActionContainer>
         <Button iconRight={<Filter />} h={0.9} ghost auto>
           Filter

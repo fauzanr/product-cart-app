@@ -12,12 +12,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
   return (
     <Wrapper>
       <Sidebar />
-      <div style={{ flex: 1 }}>
-        <Text h1 px={1} py={1}>
-          Admin Dashboard
-        </Text>
-        {children}
-      </div>
+      <div style={{ flex: 1 }}>{children}</div>
     </Wrapper>
   );
 };
