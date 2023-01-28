@@ -1,12 +1,18 @@
 import CustomPagination from "@/components/customPagination";
 import Spin from "@/components/spin";
 import { PRODUCTS_URL } from "@/endpoints";
-import { debounce } from "@/hooks/useDebounce";
 import { ProductRecord, ResponsePagination } from "@/types";
 import styled from "@emotion/styled";
-import { Button, Input, Table, Text, useToasts } from "@geist-ui/core";
+import {
+  Button,
+  Input,
+  Table,
+  Text,
+  useInput,
+  useToasts,
+} from "@geist-ui/core";
 import { Filter } from "@geist-ui/icons";
-import { ChangeEvent, useState } from "react";
+import { useMemo, useState } from "react";
 import useSWR from "swr";
 
 const ActionContainer = styled.div`
@@ -18,8 +24,8 @@ const ActionContainer = styled.div`
 
 export default function ProductsPage() {
   const { setToast } = useToasts();
-  const [keyword, setKeyword] = useState("");
-  const [query, setQuery] = useState(keyword);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const { state: keyword, bindings } = useInput("");
   const [pagination, setPagination] = useState({
     total: 0,
     skip: 0,
@@ -30,26 +36,23 @@ export default function ProductsPage() {
     ResponsePagination<{
       products: ProductRecord[];
     }>
-  >(
-    `${PRODUCTS_URL}/search?q=${query}&skip=${pagination.skip}&limit=${pagination.limit}`,
-    {
-      onSuccess(data) {
-        const { total, skip } = data;
-        setPagination((prev) => ({ ...prev, total, skip }));
-      },
-      onError() {
-        setToast({ text: "Error fetching products", type: "error" });
-      },
-    }
-  );
+  >(`${PRODUCTS_URL}?skip=${pagination.skip}&limit=${pagination.limit}`, {
+    onSuccess(data) {
+      const { total, skip } = data;
+      setPagination((prev) => ({ ...prev, total, skip }));
+    },
+    onError() {
+      setToast({ text: "Error fetching products", type: "error" });
+    },
+  });
 
-  const onChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
-    debounce(() => {
-      setQuery(e.target.value);
-      setPagination((prev) => ({ ...prev, skip: 0 }));
-    });
-  };
+  const filteredProducts = useMemo(() => {
+    if (!data?.products) return [];
+
+    return data.products.filter((product) =>
+      product.title.toLowerCase().includes(keyword.toLocaleLowerCase())
+    );
+  }, [keyword, data]);
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -58,28 +61,29 @@ export default function ProductsPage() {
       </Text>
 
       <ActionContainer>
-        <Button iconRight={<Filter />} h={0.9} ghost auto>
+        <Button
+          iconRight={<Filter />}
+          h={0.9}
+          ghost
+          auto
+          onClick={() => setDrawerVisible(true)}
+        >
           Filter
         </Button>
-        <Input
-          value={keyword}
-          placeholder="Search Product"
-          clearable
-          onChange={onChangeKeyword}
-        />
+        <Input placeholder="Search Product" clearable {...bindings} />
       </ActionContainer>
 
-      <div style={{ overflowX: "auto" }}>
-        <Spin loading={isLoading}>
-          <Table data={data?.products} emptyText="No data">
+      <Spin loading={isLoading}>
+        <div style={{ overflowX: "auto", minHeight: 200 }}>
+          <Table data={filteredProducts} emptyText="No data">
             <Table.Column prop="title" label="Product Name" />
             <Table.Column prop="brand" label="Brand" />
             <Table.Column prop="price" label="Price" />
             <Table.Column prop="stock" label="Stock" />
             <Table.Column prop="category" label="Category" />
           </Table>
-        </Spin>
-      </div>
+        </div>
+      </Spin>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />
     </div>
