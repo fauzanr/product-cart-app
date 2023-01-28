@@ -2,20 +2,12 @@ import CustomPagination from "@/components/customPagination";
 import Spin from "@/components/spin";
 import { CARTS_URL } from "@/endpoints";
 import { CartRecord, ResponsePagination } from "@/types";
-import styled from "@emotion/styled";
 import { Button, Table, Text, useToasts } from "@geist-ui/core";
 import { TableColumnRender } from "@geist-ui/core/esm/table";
-import { Eye, Filter } from "@geist-ui/icons";
+import { Eye } from "@geist-ui/icons";
 import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
-
-const ActionContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-  gap: 0.5rem;
-`;
 
 export default function CartsPage() {
   const { setToast } = useToasts();
@@ -53,14 +45,8 @@ export default function CartsPage() {
         Carts
       </Text>
 
-      <ActionContainer>
-        <Button iconRight={<Filter />} h={0.9} ghost auto>
-          Filter
-        </Button>
-      </ActionContainer>
-
-      <Spin loading={isLoading}>
-        <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto", minHeight: 200 }}>
+        <Spin loading={isLoading}>
           <Table data={data?.carts} emptyText="No data">
             <Table.Column prop="userId" label="User ID" />
             <Table.Column prop="totalProducts" label="Total Products" />
@@ -68,8 +54,8 @@ export default function CartsPage() {
             <Table.Column prop="total" label="Total Price" />
             <Table.Column prop="id" width={50} render={renderAction} />
           </Table>
-        </div>
-      </Spin>
+        </Spin>
+      </div>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />
     </div>

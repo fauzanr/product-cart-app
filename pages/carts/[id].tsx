@@ -36,6 +36,12 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
     return <>{price * quantity}</>;
   };
 
+  const renderDiscount: TableColumnRender<CartRecord["products"][number]> = (
+    value
+  ) => {
+    return <>{value || 0}%</>;
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
       <Text h1 py={1}>
@@ -71,7 +77,11 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
                 label="Amount"
                 render={renderProductAmount}
               />
-              <Table.Column prop="discountPercentage" label="Discount %" />
+              <Table.Column
+                prop="discountPercentage"
+                label="Discount %"
+                render={renderDiscount}
+              />
               <Table.Column prop="discountedPrice" label="Discounted Amount" />
             </Table>
           </div>

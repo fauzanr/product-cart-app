@@ -37,3 +37,10 @@ export interface CartRecord {
 }
 
 export type ResponsePagination<T> = Pagination & T;
+
+export interface ProductFilters {
+  categories: string[];
+  brands: string[];
+  minPrice: number;
+  maxPrice: number;
+}

@@ -1,4 +1,5 @@
 import CustomPagination from "@/components/customPagination";
+import { useProductFilter } from "@/components/productFilter";
 import Spin from "@/components/spin";
 import { PRODUCTS_URL } from "@/endpoints";
 import { ProductRecord, ResponsePagination } from "@/types";
@@ -11,20 +12,27 @@ import {
   useInput,
   useToasts,
 } from "@geist-ui/core";
-import { Filter } from "@geist-ui/icons";
+import { Filter, X } from "@geist-ui/icons";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 
 const ActionContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
   gap: 0.5rem;
 `;
 
 export default function ProductsPage() {
   const { setToast } = useToasts();
-  const [drawerVisible, setDrawerVisible] = useState(false);
+  const {
+    filters,
+    Component: ProductFilter,
+    appliedFilters,
+    openFilter,
+    clearFilters,
+  } = useProductFilter();
   const { state: keyword, bindings } = useInput("");
   const [pagination, setPagination] = useState({
     total: 0,
@@ -49,10 +57,22 @@ export default function ProductsPage() {
   const filteredProducts = useMemo(() => {
     if (!data?.products) return [];
 
-    return data.products.filter((product) =>
-      product.title.toLowerCase().includes(keyword.toLocaleLowerCase())
-    );
-  }, [keyword, data]);
+    return data.products.filter((product) => {
+      const matchKeyword = product.title
+        .toLowerCase()
+        .includes(keyword.toLocaleLowerCase());
+      const matchCategory = filters.categories.length
+        ? filters.categories.includes(product.category)
+        : true;
+      const matchBrand = filters.brands.length
+        ? filters.brands.includes(product.brand)
+        : true;
+      const matchPriceRange =
+        product.price >= filters.minPrice && product.price <= filters.maxPrice;
+
+      return matchKeyword && matchCategory && matchBrand && matchPriceRange;
+    });
+  }, [keyword, data, filters]);
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -61,14 +81,26 @@ export default function ProductsPage() {
       </Text>
 
       <ActionContainer>
+        {appliedFilters > 0 && (
+          <Button
+            iconRight={<X />}
+            type="abort"
+            h={0.9}
+            auto
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        )}
         <Button
           iconRight={<Filter />}
           h={0.9}
+          type={appliedFilters ? "success" : "default"}
           ghost
           auto
-          onClick={() => setDrawerVisible(true)}
+          onClick={() => openFilter()}
         >
-          Filter
+          Filter {appliedFilters > 0 && `(${appliedFilters})`}
         </Button>
         <Input placeholder="Search Product" clearable {...bindings} />
       </ActionContainer>
@@ -86,6 +118,8 @@ export default function ProductsPage() {
       </Spin>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />
+
+      {ProductFilter}
     </div>
   );
 }

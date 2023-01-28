@@ -41,6 +41,13 @@ const Nav = styled.div`
 const NavLink = styled(Button)`
   min-width: 100% !important;
   text-align: left !important;
+
+  &[data-active="true"] {
+    color: #0070f3 !important;
+    --geist-ui-button-color: #0070f3 !important;
+    background-color: #fff !important;
+    border: 2px solid #0070f3 !important;
+  }
 `;
 
 const links = [
@@ -83,6 +90,7 @@ const Sidebar = () => {
               <NavLink
                 icon={link.icon}
                 type={pathname.startsWith(link.href) ? "success" : "default"}
+                data-active={pathname.startsWith(link.href)}
               >
                 {!hide && (
                   <Text span pl="20px">
