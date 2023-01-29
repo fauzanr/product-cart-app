@@ -34,7 +34,7 @@ export default function CartsPage() {
   const renderAction: TableColumnRender<CartRecord> = (id) => {
     return (
       <Link href={`/carts/${id}`}>
-        <Button auto scale={0.5} iconRight={<Eye />}></Button>
+        <Button auto type="abort" scale={0.5} iconRight={<Eye />}></Button>
       </Link>
     );
   };

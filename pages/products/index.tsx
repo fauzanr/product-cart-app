@@ -56,6 +56,7 @@ export default function ProductsPage() {
 
   const filteredProducts = useMemo(() => {
     if (!data?.products) return [];
+    if (appliedFilters === 0) return data.products;
 
     return data.products.filter((product) => {
       const matchKeyword = product.title

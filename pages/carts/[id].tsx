@@ -18,7 +18,7 @@ import useSWRImmutable from "swr/immutable";
 
 const DetailGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 
   padding: 0.5rem;
@@ -80,16 +80,21 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
             Details
           </Text>
           <DetailGrid>
-            <Description
-              title="User"
-              content={!userLoading ? userData?.email : <Loading w="20px" />}
-            />
-            <Description title="Total Amount" content={cart.total} />
-            <Description title="# of items" content={cart.totalQuantity} />
-            <Description
-              title="Discounted Amount"
-              content={cart.discountedTotal}
-            />
+            <div>
+              <Description
+                title="User"
+                mb={1}
+                content={!userLoading ? userData?.email : <Loading w="20px" />}
+              />
+              <Description title="# of items" content={cart.totalQuantity} />
+            </div>
+            <div>
+              <Description title="Total Amount" content={cart.total} mb={1} />
+              <Description
+                title="Discounted Amount"
+                content={cart.discountedTotal}
+              />
+            </div>
           </DetailGrid>
 
           <Text h3 mb={1} mt={3}>

@@ -2,13 +2,13 @@ import { BRANDS, CATEGORIES } from "@/const/product";
 import { ProductFilters } from "@/types";
 import { Button, Drawer, Select, Slider, Spacer, Text } from "@geist-ui/core";
 import { X } from "@geist-ui/icons";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const initialState: ProductFilters = {
   categories: [],
   brands: [],
   minPrice: 0,
-  maxPrice: 1500,
+  maxPrice: 2000,
 };
 
 export const useProductFilter = () => {
@@ -99,6 +99,7 @@ export const useProductFilter = () => {
           mt={0.5}
           ml="10px"
           w="calc(100% - 20px)"
+          initialValue={filters.minPrice}
           value={filters.minPrice}
           onChange={(v) => onChangeFilter("minPrice", v)}
         />
@@ -114,6 +115,7 @@ export const useProductFilter = () => {
           mt={0.5}
           ml="10px"
           w="calc(100% - 20px)"
+          initialValue={filters.maxPrice}
           value={filters.maxPrice}
           onChange={(v) => onChangeFilter("maxPrice", v)}
         />
