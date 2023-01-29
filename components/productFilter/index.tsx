@@ -43,7 +43,12 @@ export const useProductFilter = () => {
   );
 
   const Component = (
-    <Drawer visible={visible} w="280px" disableBackdropClick>
+    <Drawer
+      visible={visible}
+      w="280px"
+      onClose={() => setVisible(false)}
+      disableBackdropClick
+    >
       <div style={{ textAlign: "right" }}>
         <Button
           icon={<X />}

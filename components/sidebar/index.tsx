@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
+  Home,
   Package,
   ShoppingCart,
 } from "@geist-ui/icons";
@@ -51,6 +52,11 @@ const NavLink = styled(Button)`
 `;
 
 const links = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: <Home />,
+  },
   {
     title: "Products",
     href: "/products",

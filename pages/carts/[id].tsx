@@ -8,6 +8,7 @@ import {
   Note,
   Table,
   Text,
+  useToasts,
 } from "@geist-ui/core";
 import { TableColumnRender } from "@geist-ui/core/esm/table";
 import { ArrowLeft } from "@geist-ui/icons";
@@ -40,9 +41,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 export default function CartsPage({ cart }: { cart: CartRecord }) {
+  const { setToast } = useToasts();
+
   const { data: userData, isLoading: userLoading } =
-    useSWRImmutable<UserRecord>(() =>
-      cart ? `${USERS_URL}/${cart.userId}` : null
+    useSWRImmutable<UserRecord>(
+      () => (cart ? `${USERS_URL}/${cart.userId}` : null),
+      {
+        onError() {
+          setToast({ text: "Error fetching user detail", type: "error" });
+        },
+      }
     );
 
   const renderProductAmount: TableColumnRender<
@@ -84,7 +92,13 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
               <Description
                 title="User"
                 mb={1}
-                content={!userLoading ? userData?.email : <Loading w="20px" />}
+                content={
+                  !userLoading ? (
+                    userData?.email || cart.userId
+                  ) : (
+                    <Loading w="20px" />
+                  )
+                }
               />
               <Description title="# of items" content={cart.totalQuantity} />
             </div>

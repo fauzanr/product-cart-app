@@ -1,7 +1,6 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 import Sidebar from "../sidebar";
-import { Text } from "@geist-ui/core";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -13,7 +12,7 @@ const Main = styled.div`
   overflow: hidden;
 `;
 
-const Layout = ({ children }: { children: JSX.Element }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Wrapper>
       <Sidebar />

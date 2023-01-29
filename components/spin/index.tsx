@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Loading } from "@geist-ui/core";
-import React from "react";
+import React, { ReactNode } from "react";
 
 const LoadingOverlay = styled.div`
   position: absolute;
@@ -23,7 +23,7 @@ const Spin = ({
   children,
 }: {
   loading?: boolean;
-  children: JSX.Element;
+  children: ReactNode;
 }) => {
   return (
     <div style={{ position: "relative" }}>
