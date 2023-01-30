@@ -1,8 +1,9 @@
 import { BRANDS, CATEGORIES } from "@/const/product";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { ProductFilters } from "@/types";
 import { Button, Drawer, Select, Slider, Spacer, Text } from "@geist-ui/core";
 import { X } from "@geist-ui/icons";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const initialState: ProductFilters = {
   categories: [],
@@ -14,6 +15,8 @@ const initialState: ProductFilters = {
 export const useProductFilter = () => {
   const [visible, setVisible] = useState(false);
   const [filters, setFilters] = useState<typeof initialState>(initialState);
+  const [localFilter, setLocalFilter] =
+    useLocalStorage<ProductFilters>("product-filter");
 
   const onChangeFilter = <
     T extends keyof typeof initialState,
@@ -22,7 +25,11 @@ export const useProductFilter = () => {
     name: T,
     value: K
   ) => {
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    setFilters((prev) => {
+      const newFilter = { ...prev, [name]: value };
+      setLocalFilter(newFilter);
+      return newFilter;
+    });
   };
 
   const openFilter = () => {
@@ -31,6 +38,7 @@ export const useProductFilter = () => {
 
   const clearFilters = () => {
     setFilters(initialState);
+    setLocalFilter(initialState);
   };
 
   const appliedFilters = useMemo(
@@ -41,6 +49,10 @@ export const useProductFilter = () => {
       (filters.maxPrice < initialState.maxPrice ? 1 : 0),
     [filters]
   );
+
+  useEffect(() => {
+    if (localFilter) setFilters(localFilter);
+  }, [localFilter]);
 
   const Component = (
     <Drawer

@@ -31,6 +31,8 @@ export default function CartsPage() {
     },
   });
 
+  const renderPrice: TableColumnRender<CartRecord> = (value) => <>${value}</>;
+
   const renderAction: TableColumnRender<CartRecord> = (id) => {
     return (
       <Link href={`/carts/${id}`}>
@@ -51,7 +53,11 @@ export default function CartsPage() {
             <Table.Column prop="userId" label="User ID" />
             <Table.Column prop="totalProducts" label="Total Products" />
             <Table.Column prop="totalQuantity" label="Total Quantity" />
-            <Table.Column prop="total" label="Total Price" />
+            <Table.Column
+              prop="total"
+              label="Total Price"
+              render={renderPrice}
+            />
             <Table.Column prop="id" width={50} render={renderAction} />
           </Table>
         </Spin>

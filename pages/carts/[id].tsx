@@ -103,10 +103,14 @@ export default function CartsPage({ cart }: { cart: CartRecord }) {
               <Description title="# of items" content={cart.totalQuantity} />
             </div>
             <div>
-              <Description title="Total Amount" content={cart.total} mb={1} />
+              <Description
+                title="Total Amount"
+                content={"$" + cart.total}
+                mb={1}
+              />
               <Description
                 title="Discounted Amount"
-                content={cart.discountedTotal}
+                content={"$" + cart.discountedTotal}
               />
             </div>
           </DetailGrid>
