@@ -1,39 +1,15 @@
 import CustomPagination from "@/components/customPagination";
-import { useProductFilter } from "@/components/productFilter";
+import ProductFilter from "@/components/productFilter";
 import Spin from "@/components/spin";
 import { PRODUCTS_URL } from "@/endpoints";
-import { ProductRecord, ResponsePagination } from "@/types";
-import styled from "@emotion/styled";
-import {
-  Button,
-  Input,
-  Table,
-  Text,
-  useInput,
-  useToasts,
-} from "@geist-ui/core";
-import { Filter, X } from "@geist-ui/icons";
+import { ProductFilters, ProductRecord, ResponsePagination } from "@/types";
+import { Table, Text, useToasts } from "@geist-ui/core";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 
-const ActionContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  gap: 0.5rem;
-`;
-
 export default function ProductsPage() {
   const { setToast } = useToasts();
-  const {
-    filters,
-    Component: ProductFilter,
-    appliedFilters,
-    openFilter,
-    clearFilters,
-  } = useProductFilter();
-  const { state: keyword, bindings } = useInput("");
+  const [filters, setFilters] = useState<ProductFilters>();
   const [pagination, setPagination] = useState({
     total: 0,
     skip: 0,
@@ -56,12 +32,12 @@ export default function ProductsPage() {
 
   const filteredProducts = useMemo(() => {
     if (!data?.products) return [];
-    if (appliedFilters === 0) return data.products;
+    if (!filters) return data.products;
 
     return data.products.filter((product) => {
       const matchKeyword = product.title
         .toLowerCase()
-        .includes(keyword.toLocaleLowerCase());
+        .includes(filters.keyword.toLocaleLowerCase());
       const matchCategory = filters.categories.length
         ? filters.categories.includes(product.category)
         : true;
@@ -73,7 +49,7 @@ export default function ProductsPage() {
 
       return matchKeyword && matchCategory && matchBrand && matchPriceRange;
     });
-  }, [keyword, data, filters]);
+  }, [data, filters]);
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -81,30 +57,7 @@ export default function ProductsPage() {
         Products
       </Text>
 
-      <ActionContainer>
-        {appliedFilters > 0 && (
-          <Button
-            iconRight={<X />}
-            type="abort"
-            h={0.9}
-            auto
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </Button>
-        )}
-        <Button
-          iconRight={<Filter />}
-          h={0.9}
-          type={appliedFilters ? "success" : "default"}
-          ghost
-          auto
-          onClick={() => openFilter()}
-        >
-          Filter {appliedFilters > 0 && `(${appliedFilters})`}
-        </Button>
-        <Input placeholder="Search Product" clearable {...bindings} />
-      </ActionContainer>
+      <ProductFilter onChange={(filters) => setFilters(filters)} />
 
       <Spin loading={isLoading}>
         <div style={{ overflowX: "auto", minHeight: 200 }}>
@@ -119,8 +72,6 @@ export default function ProductsPage() {
       </Spin>
 
       <CustomPagination pagination={pagination} onChange={setPagination} />
-
-      {ProductFilter}
     </div>
   );
 }

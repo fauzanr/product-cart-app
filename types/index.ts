@@ -101,6 +101,7 @@ export interface UserRecord {
 export type ResponsePagination<T> = Pagination & T;
 
 export interface ProductFilters {
+  keyword: string;
   categories: string[];
   brands: string[];
   minPrice: number;
